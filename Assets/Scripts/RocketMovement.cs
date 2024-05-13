@@ -8,6 +8,7 @@ public class RocketMovement : MonoBehaviour
     private readonly float SPEED = 5f;
     private readonly float ROTATIONSPEED = 0.01f;
 
+    public bool _IsBoosted => _isBoosted;
     private void Awake()
     {
         _rb2d = GetComponent<Rigidbody2D>();
@@ -16,8 +17,8 @@ public class RocketMovement : MonoBehaviour
     public void ApplyMovement(Vector2 direction)
     {
         // TODO : 회전을 적용하고 이동을 적용함 -> 이에 대한 구현을 아래에서 진행할 것
-        // Rotate(direction);
-        // Move();
+         Rotate(direction);
+         Move();
     }
 
     public void ApplyBoost(bool isPressed)
@@ -34,6 +35,6 @@ public class RocketMovement : MonoBehaviour
     private void Move()
     {
         // TODO : 움직임 적용
-        
+
     }
 }
