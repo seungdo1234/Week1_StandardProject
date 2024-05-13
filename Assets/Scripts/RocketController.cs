@@ -25,8 +25,8 @@ public class RocketController : MonoBehaviour
         if (_isMoving || _energySystem.UseEnergy(SpendEnergy()))
         {
             StartCoroutine(MoveDuration());
-            Vector2 dir = value.Get<Vector2>().normalized;
-            _rocketMovement.ApplyMovement(dir);
+            Vector2 direction = value.Get<Vector2>().normalized;
+            _rocketMovement.ApplyMovement(direction);
         }
     }
 
@@ -39,7 +39,7 @@ public class RocketController : MonoBehaviour
 
     private float SpendEnergy()
     {
-        return _rocketMovement._IsBoosted ? _spendEnergyAmount * 3f : _spendEnergyAmount;
+        return _rocketMovement.IsBoosted ? _spendEnergyAmount * 3f : _spendEnergyAmount;
     }
 
     private IEnumerator MoveDuration()
