@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,25 +10,19 @@ public class RocketController : MonoBehaviour
     
     private bool _isMoving;
     private Vector2 _movementDirection;
-    private float _spendEnergyAmount = 1f;
-    private float moveDuration = 1f;
-    private WaitForSeconds _wait;
     private void Awake()
     {
         _energySystem = GetComponent<EnergySystem>();
         _rocketMovement = GetComponent<RocketMovement>();
-        _wait = new WaitForSeconds(moveDuration);
     }
 
     // TODO : OnMove 구현
     private void OnMove(InputValue value)
     {
-        if (_isMoving || _energySystem.UseEnergy(SpendEnergy()))
-        {
-            StartCoroutine(MoveDuration());
-            Vector2 direction = value.Get<Vector2>().normalized;
-            _rocketMovement.ApplyMovement(direction);
-        }
+        Vector2 direction = value.Get<Vector2>().normalized;
+        _movementDirection = direction;
+
+        _isMoving = direction != Vector2.zero;
     }
 
     // TODO : OnBoost 구현
@@ -37,15 +32,17 @@ public class RocketController : MonoBehaviour
         _rocketMovement.ApplyBoost(value.isPressed);
     }
 
-    private float SpendEnergy()
+    private void FixedUpdate()
     {
-        return _rocketMovement.IsBoosted ? _spendEnergyAmount * 3f : _spendEnergyAmount;
-    }
-
-    private IEnumerator MoveDuration()
-    {
-        _isMoving = true;
-        yield return _wait;
-        _isMoving = false;
+        if (_isMoving)
+        {
+            float boostEnergy = _rocketMovement.IsBoosted ? 3f : 1f;
+            float spendEnergy = Time.fixedDeltaTime * boostEnergy;
+            
+            if (_energySystem.UseEnergy(spendEnergy))
+            {
+                _rocketMovement.ApplyMovement(_movementDirection);
+            }
+        }
     }
 }

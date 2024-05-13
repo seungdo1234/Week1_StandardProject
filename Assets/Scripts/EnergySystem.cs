@@ -5,7 +5,7 @@ public class EnergySystem : MonoBehaviour
 {
     public event Action<float> OnEnergyChanged;
     public float MaxFuel { get; private set; } = 10f;
-    public float Fuel { get; private set; } = 10f;
+    [field:SerializeField] public float Fuel { get; private set; } = 10f;
     
     public bool UseEnergy(float amount)
     {
